@@ -1,0 +1,19 @@
+{
+  "name": "scaffold-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "pack": "bun run build && mkdir -p ./release && rm -f ./release/scaffold-frontend.vome && zip -r ./release/scaffold-frontend.vome module.json README.md web assets -x '*.DS_Store'"
+  },
+  "dependencies": {
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "typescript": "~5.7.2",
+    "vite": "^6.0.7"
+  }
+}

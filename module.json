@@ -1,0 +1,19 @@
+{
+  "name": "前端脚手架示例",
+  "key": "scaffold-frontend",
+  "version": "1.0.0",
+  "description": "纯前端微应用脚手架示例（web/ + menus.appKey）",
+  "author": "vome",
+  "logo": "assets/logo.png",
+  "readme": "README.md",
+  "menus": [
+    {
+      "name": "脚手架前端",
+      "router": "/scaffold-frontend",
+      "appKey": "scaffold-frontend",
+      "icon": "icon-app",
+      "orderNum": 99,
+      "isShow": true
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "plugin-menu": {
+    "prefix": "plugin-menu",
+    "scope": "json",
+    "body": [
+      "{",
+      "  \"name\": \"${1:菜单名}\",",
+      "  \"router\": \"/${2:key}\",",
+      "  \"appKey\": \"${2:key}\",",
+      "  \"icon\": \"${3:icon-app}\",",
+      "  \"orderNum\": ${4:99},",
+      "  \"isShow\": true",
+      "}"
+    ],
+    "description": "module.json.menus 单项（appKey 通常等于插件 key；宿主 wujie 加载 /vome/apps/{key}/）"
+  },
+  "plugin-vue-app": {
+    "prefix": "plugin-vue",
+    "scope": "vue",
+    "body": [
+      "<template>",
+      "  <main class=\"page\">",
+      "    <h1>${1:插件名}</h1>",
+      "    <p>$0</p>",
+      "  </main>",
+      "</template>",
+      "",
+      "<script setup lang=\"ts\">",
+      "defineOptions({ name: '${2:App}' })",
+      "</script>",
+      "",
+      "<style scoped>",
+      ".page {",
+      "  min-height: 100vh;",
+      "  margin: 0;",
+      "  display: grid;",
+      "  place-items: center;",
+      "  text-align: center;",
+      "  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;",
+      "  background: #f5f7fb;",
+      "  color: #1a1d26;",
+      "}",
+      "",
+      "h1 {",
+      "  margin: 0 0 0.5rem;",
+      "  font-size: 1.5rem;",
+      "  color: #4e5dff;",
+      "}",
+      "",
+      "p {",
+      "  margin: 0;",
+      "  opacity: 0.75;",
+      "}",
+      "</style>",
+      ""
+    ],
+    "description": "插件 Vue3 SFC 页面（源码在 src/，构建到 web/）"
+  },
+  "plugin-vue-main": {
+    "prefix": "plugin-main",
+    "scope": "typescript",
+    "body": [
+      "import { createApp } from 'vue'",
+      "import App from './App.vue'",
+      "",
+      "createApp(App).mount('#app')",
+      ""
+    ],
+    "description": "插件 Vue3 入口 main.ts"
+  }
+}
