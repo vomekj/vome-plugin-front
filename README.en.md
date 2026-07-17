@@ -4,7 +4,7 @@
 
 A plugin scaffold with **Admin micro-app UI only (`web/`)**. Pack it as a `.vome`, install it in [vome-admin](https://gitee.com/vomekj/vome-admin), and let [vome-service](https://gitee.com/vomekj/vome-service) host the static files. Ideal for extra admin / settings pages that **do not** need host `invoke` backend hooks.
 
-> Open-sourced by Vome / 微茫科技. Pairs with Service (static hosting) + Admin (menus + wujie).
+> Open-sourced by Vome / 威迈科技. Pairs with Service (static hosting) + Admin (menus + wujie).
 
 ## When to use
 
@@ -167,7 +167,7 @@ See [规范.md](./规范.md) for the full convention.
 
 ## License
 
-[MIT](./LICENSE) © VomeShop / 微茫科技
+[MIT](./LICENSE) © VomeShop / 威迈科技
 
 ---
 

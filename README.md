@@ -4,7 +4,7 @@
 
 只含 **Admin 微应用页面（`web/`）** 的插件脚手架，打包为 `.vome` 后，在 [vome-admin](https://gitee.com/vomekj/vome-admin) 安装启用，由 [vome-service](https://gitee.com/vomekj/vome-service) 托管静态资源。适合在后台扩展管理页 / 配置页，**无需**宿主 `invoke` 后端钩子的场景。
 
-> 微茫科技开源项目。配套 Service（静态资源）+ Admin（菜单 + wujie）。
+> 威迈科技开源项目。配套 Service（静态资源）+ Admin（菜单 + wujie）。
 
 ## 何时选用
 
@@ -167,7 +167,7 @@ vome-plugin-front/
 
 ## 许可证
 
-[MIT](./LICENSE) © VomeShop / 微茫科技
+[MIT](./LICENSE) © VomeShop / 威迈科技
 
 ---
 
