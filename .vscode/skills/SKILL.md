@@ -1,79 +1,80 @@
 ---
-name: scaffold-front
+name: vome-plugin-front
 description: >-
-  纯前端插件微应用完整用法：Vue3/Vite、module.json menus、构建 web/、wujie、打包注意点。
-  Use when developing plugins/scaffold-front or a frontend-only .vome micro-app.
+  纯前端插件（vome-plugin-front）：Vue3/Vite、module.json menus、web/、wujie、
+  打包 .vome。Use when developing plugins/vome-plugin-front or a frontend-only micro-app.
 ---
 
-# 纯前端插件脚手架（scaffold-front）
+# 纯前端插件（vome-plugin-front）
 
-复制本目录后，用 Vue3 写微应用，构建进 `web/`，打成 `.vome` 安装；后台菜单带 `appKey` 后由 **wujie** 打开。
+> **目录**：`plugins/vome-plugin-front`  
+> **示例 key**：`scaffold-frontend`  
+> **入口**：[AGENTS.md](../AGENTS.md)
+
+用 Vue3 写微应用，构建进 `web/`，打成 `.vome`；菜单 `appKey` 后由 **wujie** 打开。
+
+## IDE
+
+| 项 | 说明 |
+|----|------|
+| Snippets | `.vscode/plugin.code-snippets`；工作区根须能加载本 `.vscode` |
+| Skills | 建议 `.cursor/skills/vome-plugin-front/` |
+| 规范 | [规范.md](../../规范.md) |
 
 ## 能做什么
 
 | 能力 | 说明 |
 |------|------|
-| 微应用页面 | 安装后访问 `/vome/apps/{key}/`；菜单 `appKey` = `key` 时嵌入 admin |
-| Vue3 + Vite | 源码在 `src/`，本地 `bun run dev` 预览 |
-| 相对资源 | `base: './'`，适配子路径托管 |
-| 菜单同步 | `module.json.menus` 安装时写入宿主菜单 |
+| 微应用 | `/vome/apps/{key}/`；`appKey` = `key` 时嵌入 Admin |
+| Vue3 + Vite | 源码 `src/`，`bun run dev` |
+| 相对资源 | `base: './'`，适配子路径 |
+| 菜单同步 | `module.json.menus` 安装时写入 |
 
-**不包含**：后端 `server/`、钩子 `hook`、`invoke`（要后端用 scaffold-service / scaffold-full）。
+**不含** `server/`、`hook`、`invoke`（要后端用 service / full）。
 
 ## 命令
 
 ```bash
-cd plugins/scaffold-front
+cd plugins/vome-plugin-front
 bun install
-bun run dev      # Vite 开发服务器（改 src/）
-bun run build    # → web/（emptyOutDir，会清空旧产物）
-bun run pack     # build 后 zip → release/{key}.vome
+bun run dev      # Vite（根路径预览 ≠ 线上子路径）
+bun run build    # → web/（emptyOutDir）
+bun run pack     # → release/scaffold-frontend.vome
 ```
 
-改 `module.json.key` 时，同步改 `package.json` 里 `pack` 的 zip 文件名（示例 `scaffold-frontend`）。
+改 `module.json.key` 时同步：`menus.appKey`、`router`、`pack` zip 名、页面文案。
 
 ## 目录与产物
 
 | 路径 | 用途 |
 |------|------|
 | `module.json` | 清单 + `menus` |
-| `index.html` | Vite HTML 入口 |
-| `vite.config.ts` | `base: './'`，`outDir: 'web'` |
-| `src/main.ts` / `src/App.vue` | Vue 入口与根组件 |
-| `web/` | **构建产物**（进包）；勿手写业务，改完必 `build` |
-| `assets/` | 插件 logo（元数据，不是 Vite public） |
-| `release/*.vome` | 含 `module.json` + `README.md` + `web/` + `assets/` |
+| `index.html` / `vite.config.ts` | Vite 入口；`outDir: web`，`base: './'` |
+| `src/main.ts` / `App.vue` | 源码 |
+| `web/` | **构建产物**（进包）；改完必 build |
+| `assets/` | logo（元数据，非 Vite public） |
+| `release/*.vome` | `module.json` + README + `web/` + `assets/` |
 
-包内**不要**含 `src/`、`node_modules/`、`index.html`（根目录源入口）。
+包内不要：`src/`、`node_modules/`、根 `index.html`。
 
-## module.json 字段
+## module.json
 
-| 字段 | 必填 | 怎么用 |
-|------|------|--------|
-| `name` / `key` / `version` | 是 | `key` 不可为 `plugin`；与菜单 `appKey`、URL 段一致 |
-| `menus` | 强烈建议 | 见下表 |
-| `logo` / `readme` / `description` / `author` | 否 | 展示用 |
-| `hook` / `routes` / `config` | 本脚手架通常不用 | 无 server 时不要声明 hook/routes（安装会失败） |
+| 字段 | 必填 | 说明 |
+|------|------|------|
+| `name` / `key` / `version` | 是 | `key` 不可为 `plugin` |
+| `menus` | 强烈建议 | 见下 |
+| `hook` / `routes` / `config` | **不要声明** | 无 server 时安装会失败 |
 
-### menus 单项
+### menus
 
 | 字段 | 说明 |
 |------|------|
-| `name` | 侧栏显示名 |
-| `router` | 后台路由 path，如 `/scaffold-frontend` |
-| `appKey` | **必须**等于插件 `key`，宿主才走微应用页 |
-| `icon` | 图标名（如 `icon-app`） |
-| `orderNum` / `isShow` | 排序与是否显示 |
+| `name` | 侧栏名 |
+| `router` | 如 `/scaffold-frontend` |
+| `appKey` | **必须** = `key` |
+| `icon` / `orderNum` / `isShow` | 展示 |
 
-## 可以用什么（前端）
-
-### Vue3 标准能力
-
-- `<script setup lang="ts">`、SFC、`defineOptions`
-- 脚手架默认依赖：`vue`；构建工具：`vite` + `@vitejs/plugin-vue`
-- 可自行加 `vue-router` / UI 库等，但须打进 bundle（最终进 `web/`），**不要**假设能共用宿主 node_modules
-
-### 入口约定
+## 前端约定
 
 ```ts
 // src/main.ts
@@ -82,31 +83,33 @@ import App from './App.vue'
 createApp(App).mount('#app')
 ```
 
-`index.html` 里 `#app` + `/src/main.ts`；构建后资源为相对路径。
+- 可加 `vue-router` / UI 库，须打进 `web/`，**勿假设**共用宿主 node_modules  
+- wujie 内路由优先 **hash** 或相对 base，避免与宿主 history 冲突  
+- 同域共享登录态；业务请求走宿主 `/admin`、`/app`（`credentials: 'include'`，成功码 `1000`）  
+- **不**自带 `vome-core` admin CRUD  
 
-### 与宿主的关系
-
-- 静态资源由宿主提供：`GET /vome/apps/{key}/`
-- admin 菜单配置了 `appKey` 后，用 **wujie** 加载上述 URL
-- 微应用与主壳共享登录态（以宿主实现为准）；业务请求请走你们约定的 API（通常仍打宿主 `/admin` 或 `/api`，注意 CORS/凭证）
-
-本脚手架**不**自带 `vome-core` admin CRUD；需要复杂后台组件请在微应用内自建或引依赖打包。
-
-## Snippets（`.vscode/plugin.code-snippets`）
+## Snippets
 
 | 前缀 | 用途 |
 |------|------|
-| `plugin-menu` | `menus` 单项（json） |
-| `plugin-vue` | 页面 SFC 模板 |
-| `plugin-main` | `main.ts` 入口 |
+| `plugin-module` | module.json 骨架 |
+| `plugin-menu` | menus 单项 |
+| `plugin-vue` | 页面 SFC |
+| `plugin-main` | `main.ts` |
+| `plugin-fetch` | 调宿主 `/admin/…` |
 
-## 需要注意什么
+## 排错
 
-1. **先 build 再 pack**：`web/` 是产物；只改 `src` 不 build，安装包仍是旧页面。
-2. **`base: './'` 不要改成绝对 `/`**：否则挂在 `/vome/apps/{key}/` 下会丢 JS/CSS。
-3. **`appKey` 必须等于 `key`**：不一致则菜单打不开对应微应用。
-4. **不要声明 hook/routes**：纯前端包没有 `server/index.js`，安装校验会失败。
-5. **不要**把 `node_modules`、源码目录打进 `.vome`。
-6. **禁止依赖宿主 `.env`**；环境差异用构建时注入或请求宿主配置接口。
-7. **本地 `dev` ≠ 安装后路径**：dev 在 Vite 根路径；线上在 `/vome/apps/{key}/`，务必用相对 base 验证 `build` 产物。
-8. **改 key**：同步 `module.json`、`menus.appKey`、`router`、`pack` 文件名、页面文案。
+| 现象 | 排查 |
+|------|------|
+| 安装失败 | 误加了 `hook`/`routes` 却无 server |
+| 菜单点开空白 | `appKey` ≠ `key`；未 build 或 `web/` 旧 |
+| JS/CSS 404 | `base` 被改成绝对 `/` |
+| 本地正常线上挂 | 只用过 `dev`，未用 `build` 产物验子路径 |
+| 登录态丢失 | fetch 未 `credentials: 'include'`；跨域 |
+| 样式污染 | 少写 `html/body` 全局选择器；依赖 wujie 沙箱 |
+
+## 相关
+
+- VitePress：[plugin-front 开发](/plugins/plugin-front/develop) · [menus](/plugins/plugin-front/menus) · [wujie](/plugins/plugin-front/wujie) · [打包](/plugins/plugin-front/pack)
+- Admin：[微应用](/admin/micro-apps)

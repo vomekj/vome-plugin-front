@@ -12,7 +12,34 @@
       "  \"isShow\": true",
       "}"
     ],
-    "description": "module.json.menus 单项（appKey 通常等于插件 key；宿主 wujie 加载 /vome/apps/{key}/）"
+    "description": "module.json.menus 单项（appKey 必须等于插件 key；wujie → /vome/apps/{key}/）"
+  },
+  "plugin-module": {
+    "prefix": "plugin-module",
+    "scope": "json",
+    "body": [
+      "{",
+      "  \"name\": \"${1:插件名}\",",
+      "  \"key\": \"${2:my-front}\",",
+      "  \"version\": \"${3:1.0.0}\",",
+      "  \"description\": \"${4:描述}\",",
+      "  \"author\": \"${5:vome}\",",
+      "  \"logo\": \"assets/logo.png\",",
+      "  \"readme\": \"README.md\",",
+      "  \"menus\": [",
+      "    {",
+      "      \"name\": \"${1:插件名}\",",
+      "      \"router\": \"/${2:my-front}\",",
+      "      \"appKey\": \"${2:my-front}\",",
+      "      \"icon\": \"icon-app\",",
+      "      \"orderNum\": 99,",
+      "      \"isShow\": true",
+      "    }",
+      "  ]",
+      "}",
+      ""
+    ],
+    "description": "纯前端 module.json 骨架（勿声明 hook/routes）"
   },
   "plugin-vue-app": {
     "prefix": "plugin-vue",
@@ -54,7 +81,7 @@
       "</style>",
       ""
     ],
-    "description": "插件 Vue3 SFC 页面（源码在 src/，构建到 web/）"
+    "description": "插件 Vue3 SFC（源码 src/，构建到 web/）"
   },
   "plugin-vue-main": {
     "prefix": "plugin-main",
@@ -67,5 +94,25 @@
       ""
     ],
     "description": "插件 Vue3 入口 main.ts"
+  },
+  "plugin-fetch-admin": {
+    "prefix": "plugin-fetch",
+    "scope": "typescript,javascript",
+    "body": [
+      "/** 同域调宿主 Admin API（共享登录态；勿再做冲突登录页） */",
+      "async function ${1:loadData}() {",
+      "  const res = await fetch('${2:/admin/base/dict/page}', {",
+      "    method: '${3|GET,POST|}',",
+      "    credentials: 'include',",
+      "    headers: { 'Content-Type': 'application/json' },",
+      "    ${4:body: JSON.stringify({ page: 1, size: 20 }),}",
+      "  })",
+      "  const json = await res.json()",
+      "  if (json.code !== 1000) throw new Error(json.message || '请求失败')",
+      "  return json.data",
+      "}",
+      ""
+    ],
+    "description": "微应用内请求宿主 /admin/…（credentials + code===1000）"
   }
 }
