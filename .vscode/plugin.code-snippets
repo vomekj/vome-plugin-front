@@ -99,20 +99,12 @@
     "prefix": "plugin-fetch",
     "scope": "typescript,javascript",
     "body": [
-      "/** 同域调宿主 Admin API（共享登录态；勿再做冲突登录页） */",
-      "async function ${1:loadData}() {",
-      "  const res = await fetch('${2:/admin/base/dict/page}', {",
-      "    method: '${3|GET,POST|}',",
-      "    credentials: 'include',",
-      "    headers: { 'Content-Type': 'application/json' },",
-      "    ${4:body: JSON.stringify({ page: 1, size: 20 }),}",
-      "  })",
-      "  const json = await res.json()",
-      "  if (json.code !== 1000) throw new Error(json.message || '请求失败')",
-      "  return json.data",
-      "}",
+      "import { hostRequest } from '@/lib/host-api'",
+      "",
+      "/** 同域 + Bearer（vome_admin_access）+ /dev|/prod 前缀 */",
+      "const data = await hostRequest('${1|GET,POST|}', '${2:/admin/base/auth/me}'${3:, body})",
       ""
     ],
-    "description": "微应用内请求宿主 /admin/…（credentials + code===1000）"
+    "description": "微应用 hostRequest 调宿主（见 src/lib/host-api.ts）"
   }
 }

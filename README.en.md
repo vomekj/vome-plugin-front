@@ -145,7 +145,6 @@ See [规范.md](./规范.md) for the full convention.
 
 ## Do not
 
-- Depend on host `.env`  
 - Use `key: "plugin"`  
 - Install without `web/index.html`  
 
