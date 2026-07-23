@@ -12,6 +12,9 @@
 
 const TOKEN_KEY = 'vome_admin_access'
 
+/** 须与 module.json.key 一致 */
+export const PLUGIN_KEY = 'scaffold-frontend'
+
 function apiBase(): string {
   if (typeof location === 'undefined') return ''
   if (location.pathname.startsWith('/dev/')) return '/dev'

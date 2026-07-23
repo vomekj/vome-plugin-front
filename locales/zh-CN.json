@@ -1,0 +1,15 @@
+{
+  "app": {
+    "name": "脚手架前端",
+    "hint": "Vue3 微应用 · /vome/apps/scaffold-frontend/",
+    "hostHint": "可用：同域调宿主 API（共享登录态）。不可用：整包打入 vome-core/admin CRUD。"
+  },
+  "common": {
+    "confirm": "确认",
+    "cancel": "取消",
+    "save": "保存",
+    "probe": "探测宿主 /admin/base/auth/me",
+    "loading": "请求中…",
+    "locale": "语言"
+  }
+}

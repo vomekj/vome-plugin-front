@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "pack": "bun run build && mkdir -p ./release && rm -f ./release/scaffold-frontend.vome && zip -r ./release/scaffold-frontend.vome module.json README.md web assets -x '*.DS_Store'"
+    "pack": "bun run build && mkdir -p ./release && rm -f ./release/scaffold-frontend.vome && zip -r ./release/scaffold-frontend.vome module.json README.md locales web assets -x '*.DS_Store'"
   },
   "dependencies": {
     "vue": "^3.5.13"
