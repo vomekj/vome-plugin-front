@@ -1,68 +1,101 @@
 ---
 name: vome-plugin-front
 description: >-
-  纯前端插件（vome-plugin-front）：menus/wujie、hostRequest 调宿主、与 core 能力边界。
-  Use when developing plugins/vome-plugin-front.
+  纯前端插件脚手架：menus/wujie、Hash 路由、Pinia、主题/语种同步、
+  hostRequest、可选 EPS service。Use when developing plugins/vome-plugin-front.
 ---
 
 # 纯前端插件（vome-plugin-front）
 
 > **目录**：`plugins/vome-plugin-front` · **示例 key**：`scaffold-frontend`  
-> **入口**：[AGENTS.md](../AGENTS.md)
-
-## 与 vome-core 的能力边界
-
-| 能力 | 状态 | 用法 |
-|------|------|------|
-| Vue3 + Vite 微应用 `web/` | **可用** | `base: './'`；wujie → `/vome/apps/{key}/` |
-| `menus` + `appKey` | **可用** | `appKey` **必须** = `key` |
-| 同域调宿主 `/admin/…` | **可用** | `src/lib/host-api.ts` → `hostRequest` |
-| Bearer `vome_admin_access` | **可用** | 与 Admin 同域（经 `/dev` 代理的 wujie）时共享 localStorage |
-| 自动 `/dev` `/prod` 前缀 | **可用** | 按 `location.pathname` 对齐 Admin `baseUrl` |
-| 整包 `vome-core/admin` CRUD / EPS | **不推荐默认** | 体积大、与主壳重复；复杂后台写宿主 `modules/` |
-| `server/` / `hook` / `invoke` | **本脚手架无** | 用 service / full |
-| 声明 `hook`/`routes` 无 server | **禁止** | 安装失败 |
-
-## IDE
-
-见 [AGENTS.md](../AGENTS.md)。
+> **规范（边界/强制）**：[规范.md](../../规范.md)
 
 ## 命令
 
 ```bash
 cd plugins/vome-plugin-front
 bun run dev | build | pack
+# 建议：cp release/*.vome ~/Downloads/vome-plugins/
 ```
 
-本地 `dev`（5173）无 Admin 代理与 token；**以安装后 wujie 为准**验证 `hostRequest`。
+本地 `dev` 通常无 Admin token / 主题语种 bus；**联调在 Admin wujie 内**。
 
-## 脚手架已演示
+微应用 `menus`：`appKey` = `key`，页面**无 icon**；安装后挂侧栏 **「无界渲染」**（宿主写入父菜单 `ri-artboard-fill`）。
 
-- `src/lib/host-api.ts`：`hostRequest` / `resolveHostUrl` / token
-- `App.vue`：按钮请求 `GET /admin/base/auth/me`
+## 开放封装用法
+
+### 调宿主
 
 ```ts
-import { hostRequest } from './lib/host-api'
-const me = await hostRequest('GET', '/admin/base/auth/me')
+import { hostRequest } from '@/lib/host-api'
+await hostRequest('GET', '/admin/base/auth/me')
+await hostRequest('POST', '/admin/…/…', { /* body */ })
+// 鉴权失败会用 vome_admin_refresh → /admin/base/auth/refresh 无感换票后重试
 ```
 
-## Snippets
-
-| 前缀 | 用途 |
+| 方法 | 作用 |
 |------|------|
-| `plugin-module` / `plugin-menu` | 清单与菜单 |
-| `plugin-vue` / `plugin-main` | 页面与入口 |
-| `plugin-fetch` | 调宿主 API 示意 |
+| `PLUGIN_KEY` | 须与 `module.json.key` 一致 |
+| `hostRequest(method, path, body?)` | Bearer + `/dev`\|`/prod`；`code===1000` → `data`；无感 refresh |
+| `hostClientRequest(path, init?)` | 同上；供 EPS `configureClient` |
+| `resolveHostUrl` / `getHostAccessToken` | 前缀与 token |
+
+### 可选 EPS
+
+```ts
+import { bootHostEps, service } from '@/lib/eps-client'
+await bootHostEps()
+// service.<module>… 按宿主 EPS 挂载结果调用
+```
+
+| 方法 | 作用 |
+|------|------|
+| `bootHostEps(force?)` | 拉 `GET /admin/base/open/eps` 并挂载 |
+| `service` | `getService('admin')`；须先 boot |
+
+底层只用 `vome-core/client` 公开导出：`configureClient` / `createEps` / `getService` / `clearEpsCache`。  
+宿主须开 `vome.eps`；失败用 `hostRequest` 兜底。勿打入整包 Admin CRUD UI。
+
+### 主题 / 语种
+
+```ts
+// App.vue
+import { watchHostTheme } from '@/sync-host-theme'
+import { watchHostLocale } from '@/sync-host-locale'
+onMounted(() => {
+  stopTheme = watchHostTheme()
+  stopLocale = watchHostLocale()
+})
+```
+
+```ts
+import { usePluginLocale } from '@/lib/locale'
+const { t } = usePluginLocale()
+t('app.name')
+```
+
+| 方法 | 作用 |
+|------|------|
+| `watchHostTheme` / `watchHostLocale` | App 挂载；返回取消函数 |
+| `usePluginLocale` → `t` | 页面文案 |
+| `setLocale` | **仅** sync-host-locale 跟宿主，勿做插件内语言菜单 |
+
+### 新页面
+
+加 `src/pages/<path>/index.vue` → `/#/<path>`。
 
 ## 排错
 
 | 现象 | 排查 |
 |------|------|
-| 401 unauthorized | 未登录；token 键名；跨域打开入口导致无 localStorage |
-| 404 / 连错端口 | 未走 `/dev` 前缀（应在 Admin 代理下的 wujie 打开） |
+| 401 | 未登录；跨域打开无 token |
+| 404 / 连错端口 | 未走 `/dev` 前缀（应在 Admin wujie 打开） |
 | JS/CSS 404 | `base` 被改成 `/` |
+| 主题花屏 / 双层白卡片 | 未 `watchHostTheme`；又铺了白底 |
+| 语种不跟 | 未 `watchHostLocale`；或自做了切语言 UI |
+| EPS 空 | 宿主未开 `vome.eps`；改用 `hostRequest` |
 | 菜单空白 | `appKey` ≠ `key`；未 build |
 
-## 相关
+## IDE
 
-- VitePress：[能力边界](/plugins/#与-vome-core-的关系) · [develop](/plugins/plugin-front/develop) · [wujie](/plugins/plugin-front/wujie) · [微应用](/admin/micro-apps)
+Snippets：`.vscode/plugin.code-snippets`（`plugin-fetch` / `plugin-eps` / `plugin-t`）。

@@ -106,5 +106,29 @@
       ""
     ],
     "description": "微应用 hostRequest 调宿主（见 src/lib/host-api.ts）"
+  },
+  "plugin-eps": {
+    "prefix": "plugin-eps",
+    "scope": "typescript,javascript",
+    "body": [
+      "import { bootHostEps, service } from '@/lib/eps-client'",
+      "",
+      "await bootHostEps()",
+      "// 按宿主 EPS 挂载结果调用 service.<module>…",
+      "$0"
+    ],
+    "description": "可选 EPS：bootHostEps + service（见 src/lib/eps-client.ts）"
+  },
+  "plugin-locale": {
+    "prefix": "plugin-t",
+    "scope": "typescript,javascript,vue",
+    "body": [
+      "import { usePluginLocale } from '@/lib/locale'",
+      "",
+      "const { t } = usePluginLocale()",
+      "// 语种由 App watchHostLocale 跟随 Admin；勿做插件内切语言 UI",
+      "const label = t('${1:app.name}')"
+    ],
+    "description": "插件文案 t()（跟随宿主语种）"
   }
 }
