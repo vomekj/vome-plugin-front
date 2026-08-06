@@ -78,7 +78,7 @@ API: `POST /admin/base/module/install`. The host syncs `base_menu` by `appKey` i
 | **Service** | Unpack plugin, sync menus, serve `GET /vome/apps/{key}/` → package `web/` |
 | **Admin** | Install / enable; `pages/micro` embeds the app with **wujie** (`alive: true`) |
 
-In dev, Admin Vite proxies `/vome/` to Service (see Admin `src/config/proxy.ts`).
+In dev, Admin Vite auto-proxies `/vome/` to Service via `ensureMicroAppProxy` (see `admin/plugins/micro-proxy.ts`); `proxy.ts` only configures `/dev/` and `/api/`.
 
 ## Menu convention
 

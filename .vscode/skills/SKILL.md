@@ -36,7 +36,7 @@ await hostRequest('POST', '/admin/…/…', { /* body */ })
 | 方法 | 作用 |
 |------|------|
 | `PLUGIN_KEY` | 须与 `module.json.key` 一致 |
-| `hostRequest(method, path, body?)` | Bearer + `/dev`\|`/prod`；`code===1000` → `data`；无感 refresh |
+| `hostRequest(method, path, body?)` | Bearer + `/dev`\|`/api`；`code===1000` → `data`；无感 refresh |
 | `hostClientRequest(path, init?)` | 同上；供 EPS `configureClient` |
 | `resolveHostUrl` / `getHostAccessToken` | 前缀与 token |
 

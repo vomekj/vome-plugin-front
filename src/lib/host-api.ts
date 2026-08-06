@@ -3,7 +3,7 @@
  *
  * 开放：
  * - Bearer：`vome_admin_access`；refresh：`vome_admin_refresh`
- * - 路径前缀：`/dev` 或 `/prod`
+ * - 路径前缀：开发 `/dev`，生产网关 `/api`
  * - 业务码 `code === 1000` → `data`
  * - 鉴权失败无感 refresh（对齐 Admin `/admin/base/auth/refresh`）
  *
@@ -18,9 +18,8 @@ export const PLUGIN_KEY = 'scaffold-frontend'
 
 function apiBase(): string {
   if (typeof location === 'undefined') return ''
-  if (location.pathname.startsWith('/dev/')) return '/dev'
-  if (location.pathname.startsWith('/prod/')) return '/prod'
-  return ''
+  if (location.pathname.startsWith('/dev')) return '/dev'
+  return '/api'
 }
 
 export function resolveHostUrl(path: string): string {
