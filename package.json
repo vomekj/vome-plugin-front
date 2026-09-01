@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "pack": "bun run build && mkdir -p ./release && rm -f ./release/scaffold-frontend.vome && zip -r ./release/scaffold-frontend.vome module.json README.md locales web assets -x '*.DS_Store'"
+    "pack": "bun run build && mkdir -p ./release && rm -f ./release/scaffold-frontend.vome && zip -r ./release/scaffold-frontend.vome module.json README.md locales web assets -x '*.DS_Store' && mkdir -p \"$HOME/Downloads/vome-plugins\" && cp -f ./release/scaffold-frontend.vome \"$HOME/Downloads/vome-plugins/scaffold-frontend.vome\""
   },
   "dependencies": {
     "pinia": "^3.0.4",

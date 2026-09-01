@@ -17,6 +17,10 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
+    dedupe: ['vue', 'vue-router', 'pinia'],
+  },
+  optimizeDeps: {
+    exclude: ['vome-core'],
   },
   // Relative assets so wujie can load under /vome/apps/{key}/
   base: './',
